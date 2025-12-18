@@ -21,9 +21,9 @@ const Todolist = () => {
 
 
 
-    const postTodo = async () => {
+const postTodo = async () => {
         try {
-            await axios.post(`https://todo-server-ec2-bdid.onrender.com/csbs/addtodo`, { todo }).then((response) => { console.log(response.data) })
+            await axios.post("https://todo-server-ec2-bdid.onrender.com/csbs/addtodo", { todo }).then((response) => { console.log(response.data) })
             setTodo('');
             setStatus(true);
             getTodo();
@@ -34,38 +34,40 @@ const Todolist = () => {
     }
 
     const getTodo = async () => {
-        await axios.get(`https://todo-server-ec2-bdid.onrender.com/csbs/gettodo`)
+        await axios.get("https://todo-server-ec2-bdid.onrender.com/csbs/gettodo")
             .then((response) => {
                 setTodoArray(response.data)
             })
 
     }
-    const deleteTodo = async (id) => {
-        try {
-            await axios.delete(`https://todo-server-ec2-bdid.onrender.com/csbs/deletetodo/${id}`)
 
-            getTodo()
-        } catch (err) {
-            console.log(err);
-
-        }
-    }
-    const updateTodo = async (id, data) => {
-        try {
-            await axios.put(`https://todo-server-ec2-bdid.onrender.com/csbs/updatetodo/${id}`, { todo: data });
+    const deleteTodo= async(id) => {
+        try{
+            await axios.delete(`https://todo-server-ec2-bdid.onrender.com/csbs/deletetodo/${id}`).
+            then( (response) => { 
+                console.log(response.data) 
+            });
             getTodo();
-        } catch (err) {
+        } catch(err){
             console.error(err);
         }
     }
-    const newTodo = async (id, data) => {
-        const newData = prompt("Enter your new todo", data);
-        if (newData.trim() == "") {
+
+    const updateTodo = async(id, data) => {
+        try{
+            await axios.put(`https://todo-server-ec2-bdid.onrender.com/csbs/updatetodo/${id}`, {todo: data});
+            getTodo();
+        } catch(err){
+            console.error(err);
+        }
+    }
+    const newTodo = async(id, data) => {
+        const newData = prompt("Enter your new todo");
+        if(newData.trim() == ""){
             newTodo(id)
         }
         updateTodo(id, newData);
     }
-
 
     useEffect(() => { getTodo(), [] })
 
